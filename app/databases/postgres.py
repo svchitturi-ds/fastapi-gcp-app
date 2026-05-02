@@ -12,7 +12,18 @@ DB_PASS = os.getenv("DB_PASS", "Admin=2@26$")
 DB_NAME = os.getenv("DB_NAME", "fastapi_db")
 DB_HOST = os.getenv("DB_HOST", "/cloudsql/fastapi-gcp-app:us-central1:free-trial-first-project")
 
-postgres_conn_string = f"postgresql+psycopg2://{DB_USER}:{DB_PASS}@/{DB_NAME}?host={DB_HOST}"
+# postgres_conn_string = f"postgresql+psycopg2://{DB_USER}:{DB_PASS}@/{DB_NAME}?host={DB_HOST}"
+#local to cloud running via cloud sql proxy
+# postgres_conn_string = os.getenv(
+#     "POSTGRES_CONN_STR",
+#     "postgresql+psycopg2://postgres:T:TeVB1I:pPK|t0|@35.222.47.133:5432/fastapi_db"
+# )
+
+#cloud running via public ip
+postgres_conn_string = os.getenv(
+    "POSTGRES_CONN_STR",
+    "postgresql+psycopg2://postgres:T:TeVB1I:pPK|t0|@/fastapi_db?host=/cloudsql/fastapi-gcp-app:us-central1:free-trial-first-project"
+)
 
 if not postgres_conn_string:
     raise ValueError(" POSTGRES_CONN_STR is not set in .env")
@@ -35,6 +46,7 @@ def get_db():
         yield db
     finally:
         db.close()
+
 
 
 """

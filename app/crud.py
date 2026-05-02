@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from  models import item_model as models
-from schemas import items_schema as schemas
+from app.models import item_model as models
+from app.schemas import items_schema as schemas
 
 def create_item(db: Session, item: schemas.ItemCreate):
     db_item = models.Item(**item.dict())

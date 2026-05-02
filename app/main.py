@@ -2,12 +2,12 @@ from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 import uvicorn
 from uvicorn import lifespan
-from  models import item_model as models
-from schemas import items_schema as schemas
-import crud
-from databases.postgres import SessionLocal, engine
+from  app.models import item_model as models
+from app.schemas import items_schema as schemas
+from app import crud
+from app.databases.postgres import PostgresSessionLocal, postgres_engine
 
-models.Base.metadata.create_all(bind=engine)
+models.Base.metadata.create_all(bind=postgres_engine)
 
 # app = FastAPI(title="GCP FastAPI CRUD API")
 app = FastAPI(
@@ -18,17 +18,12 @@ app = FastAPI(
     redoc_url="/gcp/api/v1/redoc",
     openapi_url="/gcp/api/v1/openapi.json",
     openapi_version= "3.1.0",
-    version="0.0.1",
-    # contact={
-    #     "name": "Randomtrees",
-    #     "url" : "https://randomtrees.com/"},
-    # license_info={"name": "RT-weave-agent - Randomtrees"},
-    # lifespan= lifespan
+    version="0.0.1"
 )
 
 # Dependency
 def get_db():
-    db = SessionLocal()
+    db = PostgresSessionLocal()
     try:
         yield db
     finally:
@@ -58,4 +53,4 @@ def delete_item(item_id: int, db: Session = Depends(get_db)):
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app", reload=True, host="0.0.0.0", port=8080)
+    uvicorn.run("app.main:app", reload=True, host="0.0.0.0", port=8080)
