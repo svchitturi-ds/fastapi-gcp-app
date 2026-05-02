@@ -1,0 +1,49 @@
+openapi: 3.0.0
+info:
+  title: FastAPI Gateway
+  version: 1.0.0
+
+servers:
+  - url: https://fastapi-gateway-3cp3muci.uc.gateway.dev
+
+paths:
+  /{proxy+}:
+    x-google-backend:
+      address: https://fastapi-service-262731639330.asia-south1.run.app
+      path_translation: APPEND_PATH_TO_ADDRESS
+    get:
+      operationId: getAll
+      responses:
+        '200':
+          description: OK
+    post:
+      operationId: postAll
+      responses:
+        '200':
+          description: OK
+    put:
+      operationId: putAll
+      responses:
+        '200':
+          description: OK
+    delete:
+      operationId: deleteAll
+      responses:
+        '200':
+          description: OK
+
+# swagger: "2.0"
+# info:
+#   title: fastapi-api
+#   description: FastAPI Gateway
+#   version: "1.0.0"
+
+# paths:
+#   /items:
+#     get:
+#       operationId: getItems
+#       x-google-backend:
+#         address: https://fastapi-service-262731639330.asia-south1.run.app
+#       responses:
+#         200:
+#           description: OK
