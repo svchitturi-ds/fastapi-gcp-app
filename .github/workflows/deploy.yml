@@ -43,4 +43,4 @@ jobs:
                 --region $REGION \ 
                 --platform managed \ 
                 --allow-unauthenticated \
-                --set-env-vars POSTGRES_CONN_STR="postgresql+psycopg2://postgres:T:TeVB1I:pPK|t0|@/fastapi_db?host=/cloudsql/fastapi-gcp-app:us-central1:free-trial-first-project"
+                --set-env-vars DATABASE_URL="postgresql+psycopg2://postgres:T%3ATeVB1I%3ApPK%7Ct0%7C@/fastapi_db?host=/cloudsql/fastapi-gcp-app:us-central1:free-trial-first-project"
