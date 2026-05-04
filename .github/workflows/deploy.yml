@@ -13,6 +13,7 @@ env:
 
 jobs:
     deploy:
+            
         name: Deploy to Cloud Run
         runs-on: ubuntu-latest
 
@@ -21,26 +22,27 @@ jobs:
             id-token: write # REQUIRED for Workload Identity 
 
         steps:
-            - name: Checkout Code 
-              uses: actions/checkout@v4 
-            - name: Authenticate to GCP (WIF - No Keys) 
-              uses: google-github-actions/auth@v2 
+            - name: Checkout Code
+              uses: actions/checkout@v4
+            - name: Authenticate to GCP (WIF - No Keys)
+              uses: google-github-actions/auth@v2
               with: 
-                workload_identity_provider: "projects/262731639330/locations/global/workloadIdentityPools/github-pool/providers/github-provider" 
-                service_account: "github-deployer@fastapi-gcp-app.iam.gserviceaccount.com" 
-            - name: Set up gcloud SDK 
-              uses: google-github-actions/setup-gcloud@v2 
-            - name: Configure Docker Auth 
-              run: gcloud auth configure-docker $REGION-docker.pkg.dev 
+                workload_identity_provider: "projects/262731639330/locations/global/workloadIdentityPools/github-pool/providers/github-provider"
+                service_account: "github-deployer@fastapi-gcp-app.iam.gserviceaccount.com"
+            - name: Set up gcloud SDK
+              uses: google-github-actions/setup-gcloud@v2
+            - name: Configure Docker Auth
+              run: gcloud auth configure-docker $REGION-docker.pkg.dev
             - name: Build & Push Docker Image 
               run: |
-                gcloud builds submit \ 
-                --tag $REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$SERVICE_NAME 
-            - name: Deploy to Cloud Run 
-              run: | 
-                gcloud run deploy $SERVICE_NAME \ 
-                --image $REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$SERVICE_NAME \ 
-                --region $REGION \ 
-                --platform managed \ 
+                gcloud builds submit --quiet \
+                --tag $REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$SERVICE_NAME \
+                .
+            - name: Deploy to Cloud Run
+              run: |
+                gcloud run deploy $SERVICE_NAME \
+                --image $REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$SERVICE_NAME \
+                --region $REGION \
+                --platform managed \
                 --allow-unauthenticated \
                 --set-env-vars DATABASE_URL="postgresql+psycopg2://postgres:T%3ATeVB1I%3ApPK%7Ct0%7C@/fastapi_db?host=/cloudsql/fastapi-gcp-app:us-central1:free-trial-first-project"
