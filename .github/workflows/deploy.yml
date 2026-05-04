@@ -9,7 +9,7 @@ env:
     PROJECT_ID: fastapi-gcp-app
     REGION: asia-south1
     SERVICE_NAME: fastapi-service
-    REPO_NAME: fastapi-gcp-app
+    REPO_NAME: fastapi-repo
 
 jobs:
     deploy:
